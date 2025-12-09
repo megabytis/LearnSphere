@@ -15,67 +15,27 @@ const validateSignupData = (req) => {
   }
 };
 
-const validateNewCategoriesData = (req) => {
-  const { name } = req.body;
-  if (!name || String(name).trim().length < 2) {
-    throw new Error("Invalid Category name");
-  }
-};
-
 const validateMongoID = (id) => {
   if (!mongoose.Types.ObjectId.isValid(id)) {
     throw new Error("Invalid ID!");
   }
 };
 
-const validateProductsData = (data) => {
-  const { title, description, price, stock, image, category } = data;
-  if (!title || String(title).trim().length < 1) {
-    throw new Error("Invalid Title!");
-  }
-  if (!description || String(description).trim().length < 5) {
-    throw new Error("Invalid Description!");
-  }
+const validateCourseData = (data) => {
+  const { title, description, instructorId, published } = data;
 
-  const p = Number(price);
-  if (!Number.isFinite(p) || p < 0) {
-    throw new Error("Invalid Price!");
+  if (!title) {
+    throw new Error("Title unavailable!");
   }
-
-  const s = Number(stock);
-  if (!Number.isInteger(s) || s < 0) {
-    throw new Error("Invalid Stock!");
-  }
-  if (!image || !validator.isURL(String(image))) {
-    throw new Error("Invalid Image URL!");
-  }
-  if (!category || !validator.isMongoId(String(category))) {
-    throw new Error("Invalid Category ID!");
-  }
-};
-
-const validateOrderStatus = (status) => {
-  const validOrderStatus = [
-    "pending",
-    "confirmed",
-    "packed",
-    "shipped",
-    "delivered",
-    "cancelled",
-  ];
-
-  if (!status) {
-    throw new Error("No status provided!");
-  }
-  if (!validOrderStatus.includes(String(status))) {
-    throw new Error("Invalid Order Status!");
+  if (!instructorId) {
+    throw new Error("Instructor not set!");
+  } else {
+    validateMongoID(instructorId);
   }
 };
 
 module.exports = {
   validateSignupData,
-  validateNewCategoriesData,
   validateMongoID,
-  validateProductsData,
-  validateOrderStatus,
+  validateCourseData,
 };

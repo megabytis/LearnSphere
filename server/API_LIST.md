@@ -9,31 +9,37 @@ GET  /auth/me
 
 ---
 
-### Admin
+### Courses
 
 ```
-GET  /admin/users
-POST /admin/courses
-PUT  /admin/courses/:id
-DELETE /admin/courses/:id
+POST /courses            (admin only)
+GET  /courses            (public – published only)
+GET  /courses/:id        (public)
+PUT  /courses/:id        (admin | owning instructor)
 ```
+
+👉 **No `/admin/courses`**
+Access control is handled by **middleware**, not URL shape.
+
+This is modern, clean backend design.
 
 ---
 
-### Courses (Public / Student)
+### Admin (users only)
 
 ```
-GET /courses
-GET /courses/:id
+GET /admin/users
 ```
+
+Admin-course creation via `/courses` is enough.
 
 ---
 
-### Instructor
+### Instructor (lessons)
 
 ```
-POST /courses/:id/lessons
-PUT  /lessons/:id
+POST   /courses/:id/lessons
+PUT    /lessons/:id
 DELETE /lessons/:id
 ```
 
