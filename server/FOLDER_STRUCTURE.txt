@@ -1,0 +1,30 @@
+server/
+└── src/
+    ├── app.js
+    ├── server.js
+    ├── config/
+    │   └── db.js
+    ├── modules/
+    │   ├── auth/
+    │   │   ├── auth.controller.js
+    │   │   ├── auth.routes.js
+    │   │   └── auth.service.js
+    │   ├── users/
+    │   │   ├── user.model.js
+    │   │   └── user.controller.js
+    │   ├── courses/
+    │   │   ├── course.model.js
+    │   │   ├── course.controller.js
+    │   │   └── course.routes.js
+    │   ├── lessons/
+    │   │   ├── lesson.model.js
+    │   │   ├── lesson.controller.js
+    │   │   └── lesson.routes.js
+    │   └── enrollments/
+    │       ├── enrollment.model.js
+    │       ├── enrollment.controller.js
+    │       └── enrollment.routes.js
+    ├── middleware/
+    │   ├── auth.js
+    │   └── role.js
+    └── routes.js
