@@ -11,11 +11,11 @@ const { userAuth } = require("../../middleware/Auth");
 
 const authRouter = express.Router();
 
-authRouter.post("/auth/signup", registerNewUser);
-authRouter.post("/auth/login", login);
-authRouter.post("/auth/refresh", refresh);
-authRouter.post("/auth/logout", logout);
-authRouter.post("/auth/logout-all", logoutAll);
-authRouter.get("/auth/me", userAuth, self);
+authRouter.post("/signup", registerNewUser);
+authRouter.post("/login", login);
+authRouter.post("/refresh", refresh);
+authRouter.post("/logout", logout);
+authRouter.post("/logout-all", logoutAll);
+authRouter.get("/me", userAuth, self);
 
 module.exports = authRouter;

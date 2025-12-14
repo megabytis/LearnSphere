@@ -7,14 +7,16 @@ const express = require("express");
 const { connectDB } = require("./src/config/database");
 const authRouter = require("./src/modules/auth/auth.routes");
 const coursesRouter = require("./src/modules/course/course.routes");
+const lessonRouter = require("./src/modules/lesson/lesson.routes");
 
 const app = express();
 
 app.use(express.json());
 app.use(cookieParser());
 
-app.use("/", authRouter);
-app.use("/", coursesRouter);
+app.use("/auth", authRouter);
+app.use("/courses", coursesRouter);
+app.use("/", lessonRouter);
 
 app.get("/health", (req, res) => {
   res.status(200).json({

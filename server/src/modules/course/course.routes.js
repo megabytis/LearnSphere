@@ -9,8 +9,8 @@ const { userAuth } = require("../../middleware/Auth");
 
 const coursesRouter = express.Router();
 
-coursesRouter.post("/courses", userAuth, authorize("admin"), createCourse);
-coursesRouter.get("/courses", fetchCourses);
-coursesRouter.get("/courses/:id", fetchCourseById);
+coursesRouter.post("/", userAuth, authorize("admin"), createCourse);
+coursesRouter.get("/", fetchCourses);
+coursesRouter.get("/:id", fetchCourseById);
 
 module.exports = coursesRouter;
