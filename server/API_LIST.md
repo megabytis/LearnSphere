@@ -38,9 +38,10 @@ Admin-course creation via `/courses` is enough.
 ### Instructor (lessons)
 
 ```
-POST   /courses/:id/lessons
-PUT    /lessons/:id
-DELETE /lessons/:id
+POST    /courses/:courseId/lessons
+GET     /courses/:courseId/lessons
+PUT     /courses/:courseId/lessons/:id
+DELETE  /courses/:courseId/lessons/:id
 ```
 
 ---

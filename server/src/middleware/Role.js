@@ -1,14 +1,17 @@
 const authorize = (authorizedRole) => {
   return (req, res, next) => {
     if (!req.user) {
-      const err = new Error("User doesn't exist");
-      err.statusCode = 401;
-      throw err;
+      return res.status(401).json({
+        error: "Authentication required!",
+      });
     }
-    if (req.user.role !== authorizedRole) {
-      const err = new Error("You aren't Authorized!");
-      err.statusCode = 403;
-      throw err;
+
+    const hasAccess = authorizedRole.includes(req.user.role);
+
+    if (!hasAccess) {
+      return res.status(403).json({
+        error: "Insufficient permission!",
+      });
     }
     next();
   };
