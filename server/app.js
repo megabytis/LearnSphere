@@ -16,7 +16,7 @@ app.use(cookieParser());
 
 app.use("/auth", authRouter);
 app.use("/courses", coursesRouter);
-app.use("/", lessonRouter);
+app.use("/courses", lessonRouter);
 
 app.get("/health", (req, res) => {
   res.status(200).json({
