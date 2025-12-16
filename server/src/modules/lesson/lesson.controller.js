@@ -97,7 +97,47 @@ const updateLesson = async (req, res, next) => {
   }
 };
 
+const deleteLesson = async (req, res, next) => {
+  try {
+    const { courseId, lessonId } = req.params;
+    validateMongoID(courseId);
+    validateMongoID(lessonId);
+
+    const foundCourse = await courseModel.findById(courseId);
+    if (!foundCourse) {
+      throw createError("Course not Found!", 404);
+    }
+
+    if (
+      !foundCourse.instructorId.equals(req.user._id) &&
+      req.user.role !== "admin"
+    ) {
+      throw createError("You are not authorized!", 403);
+    }
+
+    const foundLesson = await lessonModel.findById(lessonId);
+    if (!foundLesson) {
+      throw createError("Lesson not found!", 404);
+    }
+
+    const lessonBelongsToCourse = foundLesson.courseId.equals(foundCourse._id);
+    if (!lessonBelongsToCourse) {
+      throw createError("Lesson doesn't belong to the course!", 400);
+    }
+
+    const lesson = await lessonModel.findByIdAndDelete(lessonId);
+
+    return res.status(200).json({
+      message: "Lesson deleted Successfully!",
+      deletedLesson: lesson,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   createLesson,
   updateLesson,
+  deleteLesson,
 };
