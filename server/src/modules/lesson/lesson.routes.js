@@ -5,6 +5,8 @@ const {
   createLesson,
   updateLesson,
   deleteLesson,
+  getLessonById,
+  getLessons,
 } = require("./lesson.controller");
 const { userAuth } = require("../../middleware/Auth");
 
@@ -28,5 +30,7 @@ lessonRouter.delete(
   authorize("admin", "instructor"),
   deleteLesson
 );
+lessonRouter.get("/:courseId/lessons", getLessons);
+lessonRouter.get("/:courseId/lessons/:lessonId", getLessonById);
 
 module.exports = lessonRouter;
