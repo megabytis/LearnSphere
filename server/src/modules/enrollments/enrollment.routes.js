@@ -13,5 +13,6 @@ enrollmentRouter.post(
   enrollCourse
 );
 enrollmentRouter.get("/auth/me/enrollments", userAuth, getEnrollments);
+enrollmentRouter.get("/courses/:courseId/enrollment", userAuth);
 
 module.exports = enrollmentRouter;

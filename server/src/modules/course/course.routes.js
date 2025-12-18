@@ -9,7 +9,12 @@ const { userAuth } = require("../../middleware/Auth");
 
 const coursesRouter = express.Router();
 
-coursesRouter.post("/", userAuth, authorize("admin"), createCourse);
+coursesRouter.post(
+  "/",
+  userAuth,
+  authorize("admin", "instructor"),
+  createCourse
+);
 coursesRouter.get("/", fetchCourses);
 coursesRouter.get("/:id", fetchCourseById);
 
