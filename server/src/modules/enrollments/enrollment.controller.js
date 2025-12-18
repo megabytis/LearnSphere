@@ -39,6 +39,28 @@ const enrollCourse = async (req, res, next) => {
   }
 };
 
+const getEnrollments = async (req, res, next) => {
+  try {
+    const enrollments = await enrollmentModel
+      .find({
+        userId: req?.user?._id,
+        status: "active",
+      })
+      .populate({ path: "courseId", select: "title description" })
+      .select("completedLessons progress status enrolledAt")
+      .sort({ enrolledAt: -1 })
+      .lean();
+
+    return res.status(200).json({
+      message: "Enrollment retrieved successfully",
+      enrollments: enrollments,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   enrollCourse,
+  getEnrollments,
 };

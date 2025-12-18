@@ -49,7 +49,9 @@ DELETE  /courses/:courseId/lessons/:id
 ### Student / Enrollment
 
 ```
-POST /courses/:id/enroll
-GET  /my-courses
-POST /lessons/:id/complete
+POST   /courses/:courseId/enroll           → enroll student
+GET    /auth/me/enrollments               → list enrolled courses
+GET    /courses/:courseId/enrollment       → check enrollment status
+DELETE /courses/:courseId/unenroll         → cancel enrollment
+
 ```
