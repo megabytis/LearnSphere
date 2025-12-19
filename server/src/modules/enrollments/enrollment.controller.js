@@ -84,8 +84,38 @@ const getEnrollmentStatus = async (req, res, next) => {
   }
 };
 
+const unenrollCourse = async (req, res, next) => {
+  try {
+    const { courseId } = req.params;
+    validateMongoID(courseId);
+
+    const updatedEnrollment = await enrollmentModel.findOneAndUpdate(
+      {
+        userId: req?.user?._id,
+        courseId: courseId,
+      },
+      {
+        status: "cancelled",
+      },
+      {
+        new: true,
+      }
+    );
+    if (!updatedEnrollment) {
+      throw createError("No active enrollment found to cancel!", 404);
+    }
+
+    return res.status(200).json({
+      message: "Unenrolled Successfuly. progress Preserved!",
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   enrollCourse,
   getEnrollments,
   getEnrollmentStatus,
+  unenrollCourse,
 };
