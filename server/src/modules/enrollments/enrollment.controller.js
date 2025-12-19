@@ -60,7 +60,32 @@ const getEnrollments = async (req, res, next) => {
   }
 };
 
+const getEnrollmentStatus = async (req, res, next) => {
+  try {
+    const { courseId } = req.params;
+    validateMongoID(courseId);
+
+    const enrollment = await enrollmentModel
+      .findOne({
+        userId: req?.user?._id,
+        courseId: courseId,
+      })
+      .select("status")
+      .lean();
+
+    const isEnrolled = !!enrollment;
+
+    return res.status(200).json({
+      message: isEnrolled ? "User is enrolled" : "User is not enrolled!s",
+      status: enrollment ? enrollment.status : null,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   enrollCourse,
   getEnrollments,
+  getEnrollmentStatus,
 };
