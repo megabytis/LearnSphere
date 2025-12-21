@@ -61,4 +61,60 @@ const fetchCourseById = async (req, res, next) => {
   }
 };
 
-module.exports = { createCourse, fetchCourses, fetchCourseById };
+const updateCourse = async (req, res, next) => {
+  try {
+    const courseId = req.params.id;
+    validateMongoID(courseId);
+
+    const foundCourse = await courseModel.findById(courseId);
+    if (!foundCourse) {
+      const err = new Error("Course not Found!");
+      err.statusCode = 404;
+      throw err;
+    }
+
+    // Check ownership: admin can update any course, instructor can only update their own
+    if (
+      req.user.role !== "admin" &&
+      !foundCourse.instructorId.equals(req.user._id)
+    ) {
+      const err = new Error("You are not authorized to update this course!");
+      err.statusCode = 403;
+      throw err;
+    }
+
+    const { title, description, published } = req.body;
+    const toUpdateFields = {};
+
+    if (title && String(title).trim().length > 0) {
+      toUpdateFields.title = title.trim();
+    }
+    if (description !== undefined) {
+      toUpdateFields.description = description;
+    }
+    if (typeof published === "boolean") {
+      toUpdateFields.published = published;
+    }
+
+    if (Object.keys(toUpdateFields).length === 0) {
+      const err = new Error("No fields to update!");
+      err.statusCode = 400;
+      throw err;
+    }
+
+    const updatedCourse = await courseModel.findByIdAndUpdate(
+      courseId,
+      toUpdateFields,
+      { new: true, runValidators: true }
+    );
+
+    return res.status(200).json({
+      message: "Course updated successfully!",
+      course: updatedCourse,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = { createCourse, fetchCourses, fetchCourseById, updateCourse };
