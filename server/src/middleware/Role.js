@@ -1,4 +1,4 @@
-const authorize = (authorizedRole) => {
+const authorize = (...authorizedRole) => {
   return (req, res, next) => {
     if (!req.user) {
       return res.status(401).json({
@@ -6,7 +6,7 @@ const authorize = (authorizedRole) => {
       });
     }
 
-    const hasAccess = authorizedRole.includes(req.user.role);
+    const hasAccess = authorizedRole.some((role) => role === req.user.role);
 
     if (!hasAccess) {
       return res.status(403).json({

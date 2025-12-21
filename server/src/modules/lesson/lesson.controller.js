@@ -151,14 +151,16 @@ const getLessons = async (req, res, next) => {
       throw createError("Course not Found!", 404);
     }
 
-    const filterQuery = {};
+    // Initialize filter with courseId to ensure we only get lessons for THIS course
+    const filterQuery = { courseId };
 
-    // whom to give what access
-    if (["admin", "instructor"].includes(String(req.user?.role))) {
-      filterQuery.courseId = courseId;
-    } else {
-      filterQuery.courseId = courseId;
-      filterQuery.freePreview = true;
+    // Check user role for additional filtering
+    const userRole = req.user?.role;
+    if (!["admin", "instructor"].includes(userRole)) {
+      // If not admin/instructor, we could filter by freePreview: true
+      // However, the user recently commented this out, so I'll keep it commented
+      // but ensure the courseId filter remains active.
+      // filterQuery.freePreview = true;
     }
 
     // Sorting
