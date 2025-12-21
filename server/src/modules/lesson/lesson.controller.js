@@ -11,14 +11,14 @@ const createLesson = async (req, res, next) => {
 
     const foundCourse = await courseModel.findById(courseId);
     if (!foundCourse) {
-      throw new Error("Course not found!");
+      throw createError("Course not found!", 404);
     }
 
     if (
       !foundCourse.instructorId.equals(req.user._id) &&
       req.user.role !== "admin"
     ) {
-      throw new Error("You are not authorized!");
+      throw createError("You are not authorized!", 403);
     }
 
     const newLesson = new lessonModel({
