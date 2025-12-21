@@ -144,7 +144,7 @@ const getLessons = async (req, res, next) => {
   try {
     const { courseId } = req.params;
     validateMongoID(courseId);
-    let { page = 1, limit = 10, sortBy = "createdAt", search } = req.query;
+    let { page = 1, limit = 10, sortBy = "order", search } = req.query;
 
     const foundCourse = await courseModel.findById(courseId);
     if (!foundCourse) {
@@ -164,13 +164,13 @@ const getLessons = async (req, res, next) => {
     }
 
     // Sorting
-    const sortOptions = {};
+    const sortOptions = { order: 1 };
     if (sortBy === "createdAt") {
-      sortOptions.createdAt = -1;
+      sortOptions.createdAt = 1;
+      delete sortOptions.order;
     } else if (sortBy === "title") {
       sortOptions.title = 1;
-    } else {
-      sortOptions.createdAt = -1;
+      delete sortOptions.order;
     }
 
     // search

@@ -210,7 +210,7 @@ async function logoutAll(req, res, next) {
 
 function self(req, res) {
   res.json({
-    userData: {
+    user: {
       _id: req.user._id,
       name: req.user.name,
       email: req.user.email,
