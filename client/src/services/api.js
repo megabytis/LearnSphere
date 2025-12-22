@@ -24,7 +24,7 @@ export const authService = {
 };
 
 export const courseService = {
-  getCourses: () => api.get('/courses'),
+  getCourses: (page = 1, search = '') => api.get(`/courses?page=${page}&limit=9&search=${search}`),
   getCourseById: (id) => api.get(`/courses/${id}`),
   enroll: (id) => api.post(`/courses/${id}/enroll`),
   unenroll: (id) => api.delete(`/courses/${id}/unenroll`),

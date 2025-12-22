@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
 :root {
   /* High-Energy Color Palette */
@@ -12,7 +12,7 @@
   --warning: #f59e0b;
   
   /* Backgrounds */
-  --bg-main: #fafafa;
+  --bg-main: #f8fafc;
   --bg-card: #ffffff;
   --bg-dark: #0f172a;
   
@@ -22,18 +22,18 @@
   --text-light: #94a3b8;
   
   /* Borders & Shadows */
-  --border: #f1f5f9;
-  --radius: 16px;
-  --radius-lg: 24px;
+  --border: #e2e8f0;
+  --radius: 12px;
+  --radius-lg: 20px;
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.1), 0 4px 6px -4px rgba(99, 102, 241, 0.1);
-  --shadow-lg: 0 20px 25px -5px rgba(99, 102, 241, 0.15), 0 8px 10px -6px rgba(99, 102, 241, 0.1);
-  --shadow-glow: 0 0 20px rgba(99, 102, 241, 0.3);
+  --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-glow: 0 0 15px rgba(99, 102, 241, 0.2);
   
   /* Glassmorphism */
-  --glass-bg: rgba(255, 255, 255, 0.8);
+  --glass-bg: rgba(255, 255, 255, 0.9);
   --glass-border: rgba(255, 255, 255, 0.5);
-  --glass-blur: blur(16px);
+  --glass-blur: blur(12px);
 }
 
 * {
@@ -46,17 +46,18 @@ body {
   font-family: 'Plus Jakarta Sans', sans-serif;
   background-color: var(--bg-main);
   color: var(--text-main);
-  line-height: 1.6;
+  line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+  font-size: 16px;
   background-image: 
-    radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.05) 0px, transparent 50%),
-    radial-gradient(at 100% 100%, rgba(6, 182, 212, 0.05) 0px, transparent 50%);
+    radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.03) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(6, 182, 212, 0.03) 0px, transparent 50%);
 }
 
 .container {
-  max-width: 1200px;
+  max-width: 1280px;
   margin: 0 auto;
-  padding: 0 1.5rem;
+  padding: 0 2rem;
 }
 
 a {
@@ -80,27 +81,28 @@ ul {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.85rem 1.75rem;
+  padding: 0.75rem 1.5rem;
   border-radius: var(--radius);
-  font-weight: 700;
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-  gap: 0.6rem;
+  font-weight: 600;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  gap: 0.5rem;
   letter-spacing: -0.01em;
+  font-size: 0.95rem;
 }
 
 .btn-primary {
   background: linear-gradient(135deg, var(--primary), var(--secondary));
   color: white;
-  box-shadow: 0 10px 20px -5px rgba(99, 102, 241, 0.4);
+  box-shadow: 0 4px 6px -1px rgba(99, 102, 241, 0.3);
 }
 
 .btn-primary:hover {
-  transform: translateY(-3px) scale(1.02);
-  box-shadow: 0 15px 30px -5px rgba(99, 102, 241, 0.5);
+  transform: translateY(-1px);
+  box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.4);
 }
 
 .btn-outline {
-  border: 2px solid var(--border);
+  border: 1px solid var(--border);
   background-color: var(--bg-card);
   color: var(--text-main);
 }
@@ -108,22 +110,22 @@ ul {
 .btn-outline:hover {
   border-color: var(--primary);
   color: var(--primary);
-  transform: translateY(-2px);
+  background-color: #f8fafc;
 }
 
 /* Mesh Gradient Utilities */
 .mesh-bg {
   background-color: #ffffff;
   background-image: 
-    radial-gradient(at 40% 20%, rgba(99, 102, 241, 0.1) 0px, transparent 50%),
-    radial-gradient(at 80% 0%, rgba(6, 182, 212, 0.1) 0px, transparent 50%),
-    radial-gradient(at 0% 50%, rgba(244, 63, 94, 0.1) 0px, transparent 50%);
+    radial-gradient(at 40% 20%, rgba(99, 102, 241, 0.08) 0px, transparent 50%),
+    radial-gradient(at 80% 0%, rgba(6, 182, 212, 0.08) 0px, transparent 50%),
+    radial-gradient(at 0% 50%, rgba(244, 63, 94, 0.08) 0px, transparent 50%);
 }
 
 /* Animations */
 @keyframes float {
   0% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
+  50% { transform: translateY(-6px); }
   100% { transform: translateY(0px); }
 }
 
@@ -132,10 +134,10 @@ ul {
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
+  from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
 .animate-fade-in {
-  animation: fadeIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation: fadeIn 0.4s ease-out forwards;
 }

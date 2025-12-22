@@ -26,12 +26,37 @@ const createCourse = async (req, res, next) => {
 
 const fetchCourses = async (req, res, next) => {
   try {
+    let { page = 1, limit = 9, search } = req.query;
+
+    page = parseInt(page) || 1;
+    limit = parseInt(limit) || 9;
+    const skip = (page - 1) * limit;
+
+    const query = { published: true };
+    if (search) {
+      query.$or = [
+        { title: { $regex: search, $options: "i" } },
+        { description: { $regex: search, $options: "i" } },
+      ];
+    }
+
+    const totalCourses = await courseModel.countDocuments(query);
+    const totalPages = Math.ceil(totalCourses / limit);
+
     const courses = await courseModel
-      .find({ published: true })
-      .sort({ createdAt: -1 });
+      .find(query)
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
 
     return res.json({
       courses,
+      pagination: {
+        page,
+        limit,
+        totalCourses,
+        totalPages,
+      },
     });
   } catch (err) {
     next(err);

@@ -25,9 +25,17 @@ const lessonSchema = new mongoose.Schema({
   freePreview: { type: Boolean, default: false },
 });
 
+const enrollmentSchema = new mongoose.Schema({
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+  courseId: { type: mongoose.Schema.Types.ObjectId, ref: "Course", required: true },
+  status: { type: String, enum: ["active", "completed", "dropped"], default: "active" },
+  enrolledAt: { type: Date, default: Date.now },
+});
+
 const User = mongoose.model("User", userSchema);
 const Course = mongoose.model("Course", courseSchema);
 const Lesson = mongoose.model("Lesson", lessonSchema);
+const Enrollment = mongoose.model("Enrollment", enrollmentSchema);
 
 async function seed() {
   try {
@@ -38,11 +46,12 @@ async function seed() {
     await User.deleteMany({});
     await Course.deleteMany({});
     await Lesson.deleteMany({});
+    await Enrollment.deleteMany({});
     console.log("Cleared existing data");
 
     const hashedPassword = await bcrypt.hash("Password123!", 10);
 
-    // Create Users
+    // Create Admin & Instructor
     const admin = await User.create({
       name: "Admin User",
       email: "admin@learnsphere.com",
@@ -57,43 +66,74 @@ async function seed() {
       role: "instructor",
     });
 
-    const student = await User.create({
-      name: "Jane Student",
-      email: "student@learnsphere.com",
-      password: hashedPassword,
-      role: "student",
-    });
+    // Create 20 Students
+    const studentsData = [];
+    for (let i = 1; i <= 20; i++) {
+      studentsData.push({
+        name: `Student ${i}`,
+        email: `student${i}@learnsphere.com`,
+        password: hashedPassword,
+        role: "student",
+      });
+    }
+    const students = await User.insertMany(studentsData);
+    console.log("Users created (Admin, Instructor, 20 Students)");
 
-    console.log("Users created");
-
-    // Create Courses
-    const coursesData = [
-      { title: "Mastering Node.js", description: "Deep dive into Node.js internals and best practices.", instructorId: instructor._id, published: true },
-      { title: "React for Professionals", description: "Advanced React patterns and performance optimization.", instructorId: instructor._id, published: true },
-      { title: "MongoDB Deep Dive", description: "Mastering NoSQL with MongoDB.", instructorId: instructor._id, published: true },
-      { title: "Express.js Best Practices", description: "Building scalable APIs with Express.", instructorId: instructor._id, published: true },
-      { title: "Fullstack Web Development", description: "The complete guide to modern web development.", instructorId: instructor._id, published: true },
+    // Create 25 Courses
+    const courseTitles = [
+      "Mastering Node.js", "React for Professionals", "MongoDB Deep Dive", "Express.js Best Practices", "Fullstack Web Development",
+      "Python for Data Science", "Machine Learning 101", "Docker & Kubernetes", "AWS Cloud Practitioner", "Cybersecurity Basics",
+      "UI/UX Design Fundamentals", "Figma Mastery", "Adobe Illustrator Guide", "Digital Marketing Strategy", "SEO Optimization",
+      "Public Speaking Mastery", "Business Communication", "Project Management PMP", "Agile & Scrum", "Leadership Skills",
+      "Financial Literacy", "Stock Market Investing", "Personal Branding", "Content Creation 101", "Video Editing with Premiere Pro"
     ];
 
-    const courses = await Course.insertMany(coursesData);
-    console.log("Courses created");
+    const coursesData = courseTitles.map((title, index) => ({
+      title,
+      description: `A comprehensive guide to ${title}. Learn the ins and outs of this topic with practical examples and real-world projects. This course is designed to take you from beginner to advanced level.`,
+      instructorId: instructor._id,
+      published: true,
+    }));
 
-    // Create Lessons
+    const courses = await Course.insertMany(coursesData);
+    console.log("25 Courses created");
+
+    // Create Lessons for each course
     const lessonsData = [];
     courses.forEach((course) => {
-      for (let i = 1; i <= 5; i++) {
+      for (let i = 1; i <= 8; i++) {
         lessonsData.push({
           courseId: course._id,
-          title: `Lesson ${i}: Introduction to ${course.title} Part ${i}`,
-          content: `This is the content for lesson ${i} of ${course.title}.`,
+          title: `Lesson ${i}: ${course.title} - Part ${i}`,
+          content: `This is the detailed content for lesson ${i} of the course ${course.title}. It covers key concepts, examples, and exercises.`,
           order: i,
-          freePreview: i === 1, // First lesson is free
+          freePreview: i <= 2, // First 2 lessons are free
         });
       }
     });
 
     await Lesson.insertMany(lessonsData);
-    console.log("Lessons created");
+    console.log("Lessons created (8 per course)");
+
+    // Create Random Enrollments
+    const enrollmentsData = [];
+    students.forEach((student) => {
+      // Enroll each student in 3-5 random courses
+      const numCourses = Math.floor(Math.random() * 3) + 3;
+      const shuffledCourses = courses.sort(() => 0.5 - Math.random());
+      const selectedCourses = shuffledCourses.slice(0, numCourses);
+
+      selectedCourses.forEach((course) => {
+        enrollmentsData.push({
+          userId: student._id,
+          courseId: course._id,
+          status: "active",
+        });
+      });
+    });
+
+    await Enrollment.insertMany(enrollmentsData);
+    console.log("Random Enrollments created");
 
     console.log("Seeding completed successfully!");
     process.exit(0);

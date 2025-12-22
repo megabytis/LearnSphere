@@ -2,19 +2,23 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { courseService } from '../services/api';
 import CourseCard from '../components/CourseCard';
-import { Search, Loader, ChevronLeft } from 'lucide-react';
+import { Search, Loader, ChevronLeft, ChevronRight } from 'lucide-react';
 
 const CourseListPage = () => {
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
     const fetchCourses = async () => {
+      setLoading(true);
       try {
-        const response = await courseService.getCourses();
+        const response = await courseService.getCourses(page, searchTerm);
         setCourses(response.data.courses);
+        setTotalPages(response.data.pagination.totalPages);
       } catch (err) {
         setError('Failed to load courses. Please try again later.');
       } finally {
@@ -22,21 +26,21 @@ const CourseListPage = () => {
       }
     };
 
-    fetchCourses();
-  }, []);
+    // Debounce search to avoid too many requests
+    const timeoutId = setTimeout(() => {
+      fetchCourses();
+    }, 500);
 
-  const filteredCourses = courses.filter(course => 
-    course.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    course.description.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+    return () => clearTimeout(timeoutId);
+  }, [page, searchTerm]);
 
-  if (loading) {
-    return (
-      <div style={styles.center}>
-        <Loader className="animate-spin" size={48} color="var(--accent)" />
-      </div>
-    );
-  }
+  const handlePrevPage = () => {
+    if (page > 1) setPage(prev => prev - 1);
+  };
+
+  const handleNextPage = () => {
+    if (page < totalPages) setPage(prev => prev + 1);
+  };
 
   return (
     <div className="container">
@@ -53,7 +57,10 @@ const CourseListPage = () => {
             type="text"
             placeholder="Search courses..."
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={(e) => {
+              setSearchTerm(e.target.value);
+              setPage(1); // Reset to page 1 on search
+            }}
             style={styles.searchInput}
           />
         </div>
@@ -61,12 +68,40 @@ const CourseListPage = () => {
 
       {error && <p style={styles.error}>{error}</p>}
 
-      {filteredCourses.length > 0 ? (
-        <div style={styles.grid}>
-          {filteredCourses.map(course => (
-            <CourseCard key={course._id} course={course} />
-          ))}
+      {loading ? (
+        <div style={styles.center}>
+          <Loader className="animate-spin" size={48} color="var(--accent)" />
         </div>
+      ) : courses.length > 0 ? (
+        <>
+          <div style={styles.grid}>
+            {courses.map(course => (
+              <CourseCard key={course._id} course={course} />
+            ))}
+          </div>
+          
+          {totalPages > 1 && (
+            <div style={styles.pagination}>
+              <button 
+                onClick={handlePrevPage} 
+                disabled={page === 1}
+                style={{ ...styles.pageBtn, ...(page === 1 ? styles.disabledBtn : {}) }}
+              >
+                <ChevronLeft size={20} /> Previous
+              </button>
+              <span style={styles.pageInfo}>
+                Page {page} of {totalPages}
+              </span>
+              <button 
+                onClick={handleNextPage} 
+                disabled={page === totalPages}
+                style={{ ...styles.pageBtn, ...(page === totalPages ? styles.disabledBtn : {}) }}
+              >
+                Next <ChevronRight size={20} />
+              </button>
+            </div>
+          )}
+        </>
       ) : (
         <div style={styles.empty}>
           <p>No courses found matching your search.</p>
@@ -88,6 +123,7 @@ const styles = {
   title: {
     fontSize: '2rem',
     color: 'var(--primary)',
+    fontWeight: '800',
   },
   searchWrapper: {
     position: 'relative',
@@ -109,6 +145,7 @@ const styles = {
     fontSize: '1rem',
     outline: 'none',
     backgroundColor: 'var(--bg-card)',
+    transition: 'border-color 0.2s',
   },
   grid: {
     display: 'grid',
@@ -120,7 +157,7 @@ const styles = {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    height: '60vh',
+    height: '40vh',
   },
   error: {
     color: 'var(--error)',
@@ -132,6 +169,35 @@ const styles = {
     padding: '4rem',
     backgroundColor: 'var(--bg-card)',
     borderRadius: 'var(--radius)',
+    color: 'var(--text-muted)',
+  },
+  pagination: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: '1.5rem',
+    marginTop: '2rem',
+    paddingBottom: '4rem',
+  },
+  pageBtn: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '0.5rem',
+    padding: '0.75rem 1.5rem',
+    borderRadius: 'var(--radius)',
+    backgroundColor: 'var(--bg-card)',
+    border: '1px solid var(--border)',
+    color: 'var(--text-main)',
+    fontWeight: '600',
+    cursor: 'pointer',
+    transition: 'all 0.2s',
+  },
+  disabledBtn: {
+    opacity: 0.5,
+    cursor: 'not-allowed',
+  },
+  pageInfo: {
+    fontWeight: '600',
     color: 'var(--text-muted)',
   }
 };
