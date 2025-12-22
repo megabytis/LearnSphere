@@ -35,4 +35,8 @@ export const lessonService = {
   getLessonById: (courseId, lessonId) => api.get(`/courses/${courseId}/lessons/${lessonId}`),
 };
 
+export const paymentService = {
+  createCheckoutSession: (courseId) => api.post(`/payment/create-checkout-session/${courseId}`),
+};
+
 export default api;

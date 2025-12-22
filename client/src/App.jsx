@@ -8,6 +8,8 @@ import CourseListPage from './pages/CourseListPage';
 import CourseDetailPage from './pages/CourseDetailPage';
 import LessonPlayerPage from './pages/LessonPlayerPage';
 import MyCoursesPage from './pages/MyCoursesPage';
+import PaymentSuccessPage from './pages/PaymentSuccessPage';
+import PaymentCancelPage from './pages/PaymentCancelPage';
 
 const NotFoundPage = () => (
   <div className="container" style={{ textAlign: 'center', padding: '5rem 0' }}>
@@ -30,6 +32,8 @@ function App() {
             <Route path="/courses/:courseId" element={<CourseDetailPage />} />
             <Route path="/courses/:courseId/lessons/:lessonId" element={<LessonPlayerPage />} />
             <Route path="/my-courses" element={<MyCoursesPage />} />
+            <Route path="/payment/success" element={<PaymentSuccessPage />} />
+            <Route path="/payment/cancel" element={<PaymentCancelPage />} />
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </main>

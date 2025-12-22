@@ -1,9 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import api, { courseService, lessonService } from '../services/api';
+import api, { courseService, lessonService, paymentService } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import LessonItem from '../components/LessonItem';
-import { Loader, User, Clock, BookOpen, ChevronRight, ChevronLeft } from 'lucide-react';
+import { Loader, User, Clock, BookOpen, ChevronRight, ChevronLeft, CreditCard } from 'lucide-react';
+
+// Format price from paisa to rupees
+const formatPrice = (priceInPaisa, currency = 'inr') => {
+  if (!priceInPaisa || priceInPaisa === 0) return 'Free';
+  const price = priceInPaisa / 100;
+  if (currency === 'inr') {
+    return new Intl.NumberFormat('en-IN', {
+      style: 'currency',
+      currency: 'INR',
+      minimumFractionDigits: 0,
+    }).format(price);
+  }
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+  }).format(price);
+};
 
 const CourseDetailPage = () => {
   const { courseId } = useParams();
@@ -46,7 +63,7 @@ const CourseDetailPage = () => {
     fetchCourseData();
   }, [courseId, user]);
 
-  const handleEnroll = async () => {
+  const handleBuyNow = async () => {
     if (!user) {
       navigate('/login');
       return;
@@ -54,16 +71,25 @@ const CourseDetailPage = () => {
 
     setEnrolling(true);
     try {
-      await courseService.enroll(courseId);
-      setIsEnrolled(true);
-      // Refresh lessons to ensure they are unlocked and sorted
-      const lessonsRes = await lessonService.getLessons(courseId);
-      const sortedLessons = (lessonsRes.data.lessons || []).sort((a, b) => (a.order || 0) - (b.order || 0));
-      setLessons(sortedLessons);
-      alert('Enrolled successfully!');
+      const response = await paymentService.createCheckoutSession(courseId);
+      
+      // If course is free, enrollment happens directly
+      if (response.data.free) {
+        setIsEnrolled(true);
+        const lessonsRes = await lessonService.getLessons(courseId);
+        const sortedLessons = (lessonsRes.data.lessons || []).sort((a, b) => (a.order || 0) - (b.order || 0));
+        setLessons(sortedLessons);
+        alert('Enrolled successfully!');
+        setEnrolling(false);
+        return;
+      }
+
+      // Redirect to Stripe checkout
+      if (response.data.url) {
+        window.location.href = response.data.url;
+      }
     } catch (err) {
-      alert(err.response?.data?.message || err.response?.data?.error || 'Enrollment failed.');
-    } finally {
+      alert(err.response?.data?.message || 'Failed to initiate checkout.');
       setEnrolling(false);
     }
   };
@@ -75,7 +101,6 @@ const CourseDetailPage = () => {
     try {
       await courseService.unenroll(courseId);
       setIsEnrolled(false);
-      // Refresh lessons to lock them again
       const lessonsRes = await lessonService.getLessons(courseId);
       const sortedLessons = (lessonsRes.data.lessons || []).sort((a, b) => (a.order || 0) - (b.order || 0));
       setLessons(sortedLessons);
@@ -104,6 +129,7 @@ const CourseDetailPage = () => {
   const isInstructor = user?._id === course.instructorId;
   const isAdmin = user?.role === 'admin';
   const canAccessAll = isInstructor || isAdmin || isEnrolled;
+  const isFree = !course.price || course.price === 0;
 
   return (
     <div className="container" style={styles.page}>
@@ -155,13 +181,13 @@ const CourseDetailPage = () => {
       <aside style={styles.sidebar}>
         <div style={styles.enrollCard}>
           <div style={styles.priceSection}>
-            <span style={styles.price}>Free</span>
+            <span style={styles.price}>{formatPrice(course.price, course.currency)}</span>
           </div>
           
           {isEnrolled ? (
             <>
               <button className="btn btn-outline" style={styles.enrollBtn} disabled>
-                Already Enrolled
+                ✓ Already Enrolled
               </button>
               <button 
                 onClick={handleUnenroll} 
@@ -178,12 +204,17 @@ const CourseDetailPage = () => {
             </button>
           ) : (
             <button 
-              onClick={handleEnroll} 
+              onClick={handleBuyNow} 
               className="btn btn-primary" 
               style={styles.enrollBtn}
               disabled={enrolling}
             >
-              {enrolling ? 'Enrolling...' : 'Enroll Now'}
+              {enrolling ? 'Processing...' : (
+                <>
+                  <CreditCard size={20} />
+                  {isFree ? 'Enroll Now - Free' : `Buy Now - ${formatPrice(course.price, course.currency)}`}
+                </>
+              )}
             </button>
           )}
           <p style={styles.enrollNote}>Full lifetime access</p>

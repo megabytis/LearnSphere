@@ -10,6 +10,7 @@ const authRouter = require("./src/modules/auth/auth.routes");
 const coursesRouter = require("./src/modules/course/course.routes");
 const lessonRouter = require("./src/modules/lesson/lesson.routes");
 const enrollmentRouter = require("./src/modules/enrollments/enrollment.routes");
+const paymentRouter = require("./src/modules/payment/payment.routes");
 
 const app = express();
 
@@ -34,6 +35,9 @@ app.use(
   })
 );
 
+// Stripe webhook needs raw body - must be before express.json()
+app.use("/payment/webhook", express.raw({ type: "application/json" }));
+
 app.use(express.json());
 app.use(cookieParser());
 
@@ -41,6 +45,7 @@ app.use("/auth", authRouter);
 app.use("/courses", coursesRouter);
 app.use("/courses", lessonRouter);
 app.use("/", enrollmentRouter);
+app.use("/payment", paymentRouter);
 
 app.get("/health", (req, res) => {
   res.status(200).json({

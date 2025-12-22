@@ -14,6 +14,8 @@ const courseSchema = new mongoose.Schema({
   title: { type: String, required: true },
   description: { type: String },
   instructorId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+  price: { type: Number, required: true, min: 0, default: 0 },
+  currency: { type: String, default: "inr" },
   published: { type: Boolean, default: false },
 });
 
@@ -79,7 +81,7 @@ async function seed() {
     const students = await User.insertMany(studentsData);
     console.log("Users created (Admin, Instructor, 20 Students)");
 
-    // Create 25 Courses
+    // Create 25 Courses with prices
     const courseTitles = [
       "Mastering Node.js", "React for Professionals", "MongoDB Deep Dive", "Express.js Best Practices", "Fullstack Web Development",
       "Python for Data Science", "Machine Learning 101", "Docker & Kubernetes", "AWS Cloud Practitioner", "Cybersecurity Basics",
@@ -88,10 +90,15 @@ async function seed() {
       "Financial Literacy", "Stock Market Investing", "Personal Branding", "Content Creation 101", "Video Editing with Premiere Pro"
     ];
 
+    // Price tiers in paisa (₹499 to ₹4999)
+    const priceTiers = [49900, 99900, 149900, 199900, 249900, 299900, 349900, 399900, 449900, 499900];
+
     const coursesData = courseTitles.map((title, index) => ({
       title,
       description: `A comprehensive guide to ${title}. Learn the ins and outs of this topic with practical examples and real-world projects. This course is designed to take you from beginner to advanced level.`,
       instructorId: instructor._id,
+      price: priceTiers[index % priceTiers.length],
+      currency: "inr",
       published: true,
     }));
 
