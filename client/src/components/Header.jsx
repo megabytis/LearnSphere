@@ -46,14 +46,16 @@ const Header = () => {
 
 const styles = {
   header: {
-    height: '64px',
-    backgroundColor: 'var(--bg-card)',
-    borderBottom: '1px solid var(--border)',
+    height: '72px',
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+    backdropFilter: 'blur(12px)',
+    WebkitBackdropFilter: 'blur(12px)',
+    borderBottom: '1px solid rgba(226, 232, 240, 0.8)',
     display: 'flex',
     alignItems: 'center',
     position: 'sticky',
     top: 0,
-    zIndex: 100,
+    zIndex: 1000,
   },
   container: {
     display: 'flex',
@@ -64,46 +66,53 @@ const styles = {
   logo: {
     display: 'flex',
     alignItems: 'center',
-    gap: '0.5rem',
-    fontSize: '1.25rem',
-    fontWeight: 'bold',
+    gap: '0.75rem',
+    fontSize: '1.5rem',
+    fontWeight: '800',
     color: 'var(--primary)',
+    letterSpacing: '-0.025em',
   },
   nav: {
     display: 'flex',
     alignItems: 'center',
-    gap: '1.5rem',
+    gap: '2rem',
   },
   navLink: {
-    fontWeight: '500',
-    color: 'var(--primary-light)',
+    fontWeight: '600',
+    fontSize: '0.95rem',
+    color: 'var(--text-main)',
     transition: 'color 0.2s',
   },
   userSection: {
     display: 'flex',
     alignItems: 'center',
-    gap: '1rem',
-    paddingLeft: '1rem',
+    gap: '1.25rem',
+    paddingLeft: '1.25rem',
     borderLeft: '1px solid var(--border)',
   },
   userName: {
-    fontWeight: '600',
+    fontWeight: '700',
     fontSize: '0.9rem',
+    color: 'var(--primary)',
   },
   logoutBtn: {
-    background: 'none',
-    color: 'var(--text-muted)',
+    background: 'rgba(239, 68, 68, 0.1)',
+    color: 'var(--error)',
+    padding: '0.5rem',
+    borderRadius: '8px',
     display: 'flex',
     alignItems: 'center',
+    transition: 'all 0.2s',
   },
   authBtns: {
     display: 'flex',
     alignItems: 'center',
-    gap: '1rem',
+    gap: '1.25rem',
   },
   loginLink: {
-    fontWeight: '600',
-    color: 'var(--accent)',
+    fontWeight: '700',
+    color: 'var(--text-main)',
+    fontSize: '0.95rem',
   }
 };
 
