@@ -1,112 +1,129 @@
-# LearnSphere Backend
+# LearnSphere 🚀
 
-LearnSphere is a robust, interview-ready Backend Learning Management System (LMS) built with Node.js and Express. It provides a clean and scalable architecture for managing courses, lessons, and student enrollments with role-based access control.
+LearnSphere is a high-energy, full-stack Learning Management System (LMS) designed for a premium and immersive learning experience. Built with a robust **Node.js/Express** backend and a vibrant **React** frontend, it features a modern "Vibrant & Modern" UI overhaul that moves away from minimalism towards a high-impact, energetic aesthetic.
 
-## 🚀 Features
+![LearnSphere Banner](https://images.unsplash.com/photo-1501504905252-473c47e087f8?auto=format&fit=crop&w=1200&q=80)
 
-- **Authentication & Authorization**: Secure JWT-based authentication with refresh token rotation and session management.
+## ✨ Key Features
+
+- **Vibrant & Modern UI**: A high-energy design system featuring mesh gradients, glowing accents, and bold typography (**Plus Jakarta Sans**).
 - **Role-Based Access Control (RBAC)**: Distinct permissions for Students, Instructors, and Admins.
-- **Course Management**: Create, read, and manage courses. Instructors can manage their own content, while Admins have full control.
-- **Lesson Management**: Add, update, and delete lessons within courses. Support for free previews.
-- **Enrollment System**: Students can enroll in courses, track their progress, and manage their learning journey.
-- **Clean API Design**: RESTful endpoints with consistent request/response patterns and robust error handling.
+- **Course & Lesson Management**: Full CRUD for courses and lessons with support for **Free Previews**.
+- **Smart Enrollment System**: Dynamic enrollment/unenrollment with real-time status updates.
+- **Immersive Lesson Player**: A high-contrast, dark-themed learning environment for focused study.
+- **My Learning Dashboard**: Personalized area for students to track their enrolled courses.
+- **Secure Authentication**: JWT-based auth with secure cookie handling and session persistence.
 
 ## 🛠 Tech Stack
 
+### Frontend
+
+- **Framework**: React (Vite)
+- **Styling**: Vanilla CSS (Custom Vibrant Design System)
+- **Icons**: Lucide React
+- **State Management**: React Context API
+- **API Client**: Axios
+
+### Backend
+
 - **Runtime**: Node.js
 - **Framework**: Express.js
-- **Database**: MongoDB (via Mongoose)
-- **Authentication**: JWT (JSON Web Tokens)
+- **Database**: MongoDB (Mongoose)
+- **Security**: JWT, Bcrypt, Cookie-parser
 - **Validation**: Validator.js
-- **Security**: Bcrypt (password hashing), Cookie-parser (secure cookies)
 
-## 📂 API Modules
+## 📂 Project Structure
 
-The API is organized into several key modules:
+```text
+LearnSphere/
+├── client/           # React Frontend
+│   ├── src/
+│   │   ├── components/  # Reusable UI components
+│   │   ├── pages/       # Page-level components
+│   │   ├── styles/      # Global & component styles
+│   │   └── services/    # API service layer
+├── server/           # Node.js Backend
+│   ├── src/
+│   │   ├── modules/     # Feature-based modules (Auth, Course, Lesson, etc.)
+│   │   ├── middleware/  # Auth & Role-based guards
+│   │   └── utils/       # Shared utilities
+```
 
-- **Auth**: Handles user registration, login, logout, and token refreshing.
-- **Courses**: Manages course metadata and listing.
-- **Lessons**: Manages the content within each course.
-- **Enrollments**: Handles student registration for courses and enrollment status tracking.
-
-## 🔐 Auth & Role Rules
-
-LearnSphere uses a middleware-based approach for authentication and authorization:
-
-- **Authentication**: Handled by `userAuth` middleware, which verifies the JWT in the Authorization header.
-- **Authorization**: Handled by `authorize` middleware, which checks the user's role against the required permissions for the endpoint.
-- **Roles**:
-  - `student`: Can browse courses, view free lessons, and enroll in courses.
-  - `instructor`: Can create and manage their own courses and lessons.
-  - `admin`: Has full access to all resources, including user management and all course content.
-
-## ⚙️ How to Run Locally
+## ⚙️ Getting Started
 
 ### Prerequisites
 
-- Node.js (v18 or higher)
-- MongoDB (local or Atlas)
+- Node.js (v18+)
+- MongoDB (Local or Atlas)
 
-### Setup
+### 1. Backend Setup
 
-1. **Clone the repository**:
+```bash
+cd server
+npm install
+```
 
-   ```bash
-   git clone https://github.com/megabytis/LearnSphere.git
-   cd LearnSphere/server
-   ```
+Create a `.env` file in the `server` directory:
 
-2. **Install dependencies**:
+```env
+PORT=8888
+MONGO_URI=your_mongodb_uri
+JWT_SECRET=your_secret
+REFRESH_TOKEN_SECRET=your_refresh_secret
+NODE_ENV=development
+```
 
-   ```bash
-   npm install
-   ```
-
-3. **Configure environment variables**:
-   Create a `.env` file in the `server` directory and add the following:
-
-   ```env
-   PORT=3000
-   MONGO_URI=your_mongodb_connection_string
-   JWT_SECRET=your_jwt_secret
-   REFRESH_TOKEN_SECRET=your_refresh_token_secret
-   NODE_ENV=development
-   ```
-
-4. **Start the server**:
-
-   ```bash
-   # Development mode (with nodemon)
-   npm run dev
-
-   # Production mode
-   npm start
-   ```
-
-The server will be running at `http://localhost:3000`.
-
-## 🧪 Database Seeding
-
-To populate your database with dummy data (users, courses, lessons), run the following command:
+Run the seed script to populate the database:
 
 ```bash
 node seed.js
 ```
 
-### Dummy Credentials
+### 2. Frontend Setup
+
+```bash
+cd client
+npm install
+```
+
+Create a `.env` file in the `client` directory:
+
+```env
+VITE_API_URL=http://localhost:8888
+```
+
+### 3. Run the Application
+
+Start the backend:
+
+```bash
+cd server
+npm run dev
+```
+
+Start the frontend:
+
+```bash
+cd client
+npm run dev
+```
+
+The app will be available at `http://localhost:5173`.
+
+## 🔐 Dummy Credentials
 
 All dummy accounts use the password: **`Password123!`**
 
-| Role             | Email                         |
-| :--------------- | :---------------------------- |
-| **Admin**        | `admin@learnsphere.com`       |
-| **Instructor 1** | `instructor1@learnsphere.com` |
-| **Instructor 2** | `instructor2@learnsphere.com` |
-| **Instructor 3** | `instructor3@learnsphere.com` |
-| **Student 1**    | `student1@learnsphere.com`    |
-| _(up to)_        | ...                           |
-| **Student 10**   | `student10@learnsphere.com`   |
+| Role           | Email                         |
+| :------------- | :---------------------------- |
+| **Admin**      | `admin@learnsphere.com`       |
+| **Instructor** | `instructor1@learnsphere.com` |
+| **Student**    | `student1@learnsphere.com`    |
 
 ## 📖 API Documentation
 
-A Postman collection is included in the `server` directory: `postman_collection.json`. Import this into Postman to explore and test the API endpoints.
+A Postman collection is included in the `server` directory: `postman_collection.json`.
+
+---
+
+Built with ❤️ by the LearnSphere Team.

@@ -51,7 +51,7 @@ app.get("/health", (req, res) => {
 
 // Global Error handler
 app.use((err, req, res, next) => {
-  res.status(err.ststusCode || 500).json({
+  res.status(err.statusCode || 500).json({
     message: `ERROR: ${err.message}`,
   });
 });
