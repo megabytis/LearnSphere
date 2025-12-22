@@ -2,6 +2,7 @@ const { createError } = require("../../utils/error");
 const { validateMongoID } = require("../../utils/validate");
 const { courseModel } = require("../course/course.model");
 const { lessonModel } = require("./lesson.model");
+const { enrollmentModel } = require("../enrollments/enrollment.model");
 
 const createLesson = async (req, res, next) => {
   try {
@@ -223,11 +224,24 @@ const getLessonById = async (req, res, next) => {
     if (!foundLesson) {
       throw createError("Lesson not found!", 404);
     }
-    if (
-      foundLesson.freePreview === false &&
-      !["admin", "instructor"].includes(String(req.user?.role))
-    ) {
-      throw createError("Lesson is not free to watch!", 403);
+    // Check if user has access: admin, instructor of the course, or enrolled student
+    const userRole = req.user?.role;
+    const userId = req.user?._id;
+    
+    let hasAccess = false;
+    if (["admin", "instructor"].includes(userRole)) {
+      hasAccess = true;
+    } else if (userId) {
+      const enrollment = await enrollmentModel.findOne({
+        userId,
+        courseId,
+        status: "active"
+      });
+      if (enrollment) hasAccess = true;
+    }
+
+    if (!foundLesson.freePreview && !hasAccess) {
+      throw createError("Lesson is not free to watch! Please enroll.", 403);
     }
 
     const lessonBelongsToCourse = foundLesson.courseId.equals(foundCourse._id);
