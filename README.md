@@ -174,4 +174,4 @@ This project is licensed under the MIT License.
 
 ---
 
-Built with ❤️ by the LearnSphere Team.
+Built with ❤️ by Madhusudan Bhukta.
