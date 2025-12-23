@@ -414,9 +414,8 @@ const CourseDetailPage = () => {
                   <LessonItem 
                     key={lesson._id} 
                     lesson={lesson} 
-                    index={index} 
-                    courseId={courseId}
-                    isEnrolled={isEnrolled}
+                    isLocked={!lesson.freePreview && !isEnrolled}
+                    onClick={() => navigate(`/courses/${courseId}/lessons/${lesson._id}`)}
                   />
                 ))
               ) : (
