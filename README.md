@@ -144,6 +144,16 @@ All dummy accounts use the password: **`Password123!`**
 | **Instructor** | `instructor1@learnsphere.com` |
 | **Student**    | `student1@learnsphere.com`    |
 
+## test-card details for payment
+
+Card Number: 4242 4242 4242 4242
+
+Card Expiry: 12/24
+
+Card CVC: 123
+
+---
+
 ## 📖 API Documentation
 
 A Postman collection is included in the `server` directory: `postman_collection.json`.
