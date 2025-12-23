@@ -1,10 +1,10 @@
-import React from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
-import { CheckCircle, ArrowRight } from 'lucide-react';
+import React from "react";
+import { Link, useSearchParams } from "react-router-dom";
+import { CheckCircle, ArrowRight } from "lucide-react";
 
 const PaymentSuccessPage = () => {
   const [searchParams] = useSearchParams();
-  const sessionId = searchParams.get('session_id');
+  const sessionId = searchParams.get("session_id");
 
   return (
     <div style={styles.container}>
@@ -14,11 +14,11 @@ const PaymentSuccessPage = () => {
         </div>
         <h1 style={styles.title}>Payment Successful!</h1>
         <p style={styles.description}>
-          Thank you for your purchase! You are now enrolled in the course. 
-          Start learning right away!
+          Thank you for your purchase! You are now enrolled in the course. Start
+          learning right away!
         </p>
-        <Link to="/my-learning" className="btn btn-primary" style={styles.btn}>
-          Go to My Learning <ArrowRight size={20} />
+        <Link to="/my-courses" className="btn btn-primary" style={styles.btn}>
+          Go to My Courses <ArrowRight size={20} />
         </Link>
         <p style={styles.note}>
           A confirmation email has been sent to your registered email address.
@@ -30,48 +30,49 @@ const PaymentSuccessPage = () => {
 
 const styles = {
   container: {
-    minHeight: 'calc(100vh - 72px)',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: '2rem',
-    background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(6, 182, 212, 0.05) 100%)',
+    minHeight: "calc(100vh - 72px)",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: "2rem",
+    background:
+      "linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, rgba(6, 182, 212, 0.05) 100%)",
   },
   card: {
-    backgroundColor: 'var(--bg-card)',
-    padding: '4rem',
-    borderRadius: 'var(--radius-lg)',
-    boxShadow: 'var(--shadow-lg)',
-    textAlign: 'center',
-    maxWidth: '500px',
-    width: '100%',
+    backgroundColor: "var(--bg-card)",
+    padding: "4rem",
+    borderRadius: "var(--radius-lg)",
+    boxShadow: "var(--shadow-lg)",
+    textAlign: "center",
+    maxWidth: "500px",
+    width: "100%",
   },
   iconWrapper: {
-    marginBottom: '1.5rem',
+    marginBottom: "1.5rem",
   },
   title: {
-    fontSize: '2rem',
-    fontWeight: '800',
-    color: 'var(--text-main)',
-    marginBottom: '1rem',
+    fontSize: "2rem",
+    fontWeight: "800",
+    color: "var(--text-main)",
+    marginBottom: "1rem",
   },
   description: {
-    fontSize: '1rem',
-    color: 'var(--text-muted)',
+    fontSize: "1rem",
+    color: "var(--text-muted)",
     lineHeight: 1.6,
-    marginBottom: '2rem',
+    marginBottom: "2rem",
   },
   btn: {
-    display: 'inline-flex',
-    alignItems: 'center',
-    gap: '0.5rem',
-    padding: '1rem 2rem',
-    fontSize: '1rem',
+    display: "inline-flex",
+    alignItems: "center",
+    gap: "0.5rem",
+    padding: "1rem 2rem",
+    fontSize: "1rem",
   },
   note: {
-    fontSize: '0.85rem',
-    color: 'var(--text-light)',
-    marginTop: '2rem',
+    fontSize: "0.85rem",
+    color: "var(--text-light)",
+    marginTop: "2rem",
   },
 };
 
