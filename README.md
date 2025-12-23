@@ -33,26 +33,6 @@ LearnSphere is a high-energy, full-stack Learning Management System (LMS) design
 
 ---
 
-## 📸 Visual Showcase
-
-### 🚀 High-Impact Landing Page
-
-![Landing Page](docs/screenshots/landing.png)
-
-### 📚 Vibrant Course Catalog
-
-![Course List](docs/screenshots/courses.png)
-
-### 🎬 Immersive Lesson Player
-
-_(Screenshot coming soon)_
-
-### 💳 Secure Checkout & Dev Helper
-
-_(Screenshot coming soon)_
-
----
-
 ## 🛠 Tech Stack
 
 ### Frontend
